@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Rock Paper Scissors</title>
+    </head>
+    <body>
+        <script>
+            let winCount = 0;
+            let drawCount = 0;
+            let loseCount = 0;
+            
+            //console.log(playRound(playerSelection,computerSelection));
+            console.log(game());
+            //returns the elements
+            function computerPlay(){
+                const elements = ["Rock", "Paper", "Scissor"];
+                const randElement = elements[Math.floor(Math.random()*elements.length)];
+                return randElement;
+            }
+            
+            function playerHand(){
+                let hand = window.prompt("Choose your hand: ");
+
+                if(hand!=null){
+                    return hand;
+                }
+                else{
+                    console.log("Please write somthing according to the game rules...");
+                    playerHand();
+                }
+            }
+
+            function playRound(playerSelection, computerSelection){
+                console.log("This is the computer, " + computerSelection);
+                let message;
+            
+                if(((playerSelection.toString().toLowerCase() === "rock") && (computerSelection.toString().toLowerCase() === "paper"))
+                || ((playerSelection.toString().toLowerCase() === "paper") && (computerSelection.toString().toLowerCase() === "scissor"))
+                || ((playerSelection.toString().toLowerCase() === "scissor") && (computerSelection.toString().toLowerCase() === "rock"))){
+                    message = "lose";
+                    return message;
+                }
+                else if(((playerSelection.toString().toLowerCase() === "rock") && (computerSelection.toString().toLowerCase() === "rock"))
+                || ((playerSelection.toString().toLowerCase() === "paper") && (computerSelection.toString().toLowerCase() === "paper"))
+                || ((playerSelection.toString().toLowerCase() === "scissor") && (computerSelection.toString().toLowerCase() === "scissor"))){
+                    message = "draw";
+                    return message;
+                }
+              
+                else{
+                    message = "win";
+                    return message;
+                }
+            }
+            
+            function game(){
+                for(let i=0; i<5;i++){
+                    let playerSelection = playerHand();
+                    let computerSelection = computerPlay();
+                    let round = playRound(playerSelection,computerSelection);
+                    console.log("Round",i);
+                    if(round === "lose"){
+                        console.log("Computer: ", computerSelection, " --- You: ", playerSelection, " So, you lose.")
+                        loseCount++;
+                    }
+                    else if(round === "draw"){
+                        console.log("Computer: ", computerSelection, " --- You: ", playerSelection, " So, it's a draw.")
+                        drawCount++;
+                    }
+                    else{
+                        console.log("Computer: ", computerSelection, " --- You: ", playerSelection, " So, you win.")
+                        winCount++;
+                    }
+                }
+
+                if(loseCount>winCount){
+                    console.log("You lose, ",loseCount, " times out of 5");
+                }
+                else if(winCount> loseCount){
+                    console.log("It's a win for you congrats because won ", winCount, " times out of 5");
+                }
+                else{
+                    console.log("It's a draw");
+                }
+            }
+
+        </script>
+    </body>
+</html>
