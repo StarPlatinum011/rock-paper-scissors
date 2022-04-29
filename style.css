@@ -1,0 +1,46 @@
+html{
+    box-sizing: border-box;
+}
+
+
+.contents{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 10rem 1rem 1rem 1rem;
+}
+.contents img{
+    width: 6em;
+}
+
+.contents button{
+    border: none;
+    background-color: white;
+}
+
+.contents button:hover{
+    cursor: pointer;
+}
+.instruction{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.results{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 5em;
+}
+
+#start{
+    border: none;
+    padding: 0.8em;
+    background-color: rgb(223, 88, 88);
+    color: white;
+    border-radius: 0.4em;
+}
+#start:hover{
+    cursor: pointer;
+}

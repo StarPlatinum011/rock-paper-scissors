@@ -1,89 +1,142 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title> Rock Paper Scissors</title>
-    </head>
-    <body>
-        <script>
-            let winCount = 0;
-            let drawCount = 0;
-            let loseCount = 0;
-            
-            //console.log(playRound(playerSelection,computerSelection));
-            console.log(game());
-            //returns the elements
-            function computerPlay(){
-                const elements = ["Rock", "Paper", "Scissor"];
-                const randElement = elements[Math.floor(Math.random()*elements.length)];
-                return randElement;
-            }
-            
-            function playerHand(){
-                let hand = window.prompt("Choose your hand: ");
+  <head>
+    <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <div class="instruction">
+      <h2>Rock-Paper-Scissor</h2>
+      <h3>Please choose one, win first 5 bout to win the game.</h3>
+    </div>
+    <div class="contents">
+      <button id="rock"><img src="/img/rock.png" alt="rock" /></button>
+      <button id="scissor"><img src="/img/scissor.png" alt="scissor" /></button>
+      <button id="paper"><img src="/img/paper.png" alt="paper" /></button>
+    </div>
+    <div class="results">
+      <span>Player's Score: </span>
+      <span id="plrScore">0</span>
+      <span>Draw: </span>
+      <span id="draw">0</span>
+      <span>Computer's Score: </span>
+      <span id="cpuScore">0</span>
+    </div>
 
-                if(hand!=null){
-                    return hand;
-                }
-                else{
-                    console.log("Please write somthing according to the game rules...");
-                    playerHand();
-                }
-            }
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+      //Initialize counters
+      var winCount = 0;
+      var drawCount = 0;
+      var loseCount = 0;
 
-            function playRound(playerSelection, computerSelection){
-                console.log("This is the computer, " + computerSelection);
-                let message;
-            
-                if(((playerSelection.toString().toLowerCase() === "rock") && (computerSelection.toString().toLowerCase() === "paper"))
-                || ((playerSelection.toString().toLowerCase() === "paper") && (computerSelection.toString().toLowerCase() === "scissor"))
-                || ((playerSelection.toString().toLowerCase() === "scissor") && (computerSelection.toString().toLowerCase() === "rock"))){
-                    message = "lose";
-                    return message;
-                }
-                else if(((playerSelection.toString().toLowerCase() === "rock") && (computerSelection.toString().toLowerCase() === "rock"))
-                || ((playerSelection.toString().toLowerCase() === "paper") && (computerSelection.toString().toLowerCase() === "paper"))
-                || ((playerSelection.toString().toLowerCase() === "scissor") && (computerSelection.toString().toLowerCase() === "scissor"))){
-                    message = "draw";
-                    return message;
-                }
-              
-                else{
-                    message = "win";
-                    return message;
-                }
-            }
-            
-            function game(){
-                for(let i=0; i<5;i++){
-                    let playerSelection = playerHand();
-                    let computerSelection = computerPlay();
-                    let round = playRound(playerSelection,computerSelection);
-                    console.log("Round",i);
-                    if(round === "lose"){
-                        console.log("Computer: ", computerSelection, " --- You: ", playerSelection, " So, you lose.")
-                        loseCount++;
-                    }
-                    else if(round === "draw"){
-                        console.log("Computer: ", computerSelection, " --- You: ", playerSelection, " So, it's a draw.")
-                        drawCount++;
-                    }
-                    else{
-                        console.log("Computer: ", computerSelection, " --- You: ", playerSelection, " So, you win.")
-                        winCount++;
-                    }
-                }
+      //Define the UI Elements
+      const resPlr = document.querySelector("#plrScore");
+      const resCpu = document.querySelector("#cpuScore");
+      const draw = document.querySelector("#draw");
 
-                if(loseCount>winCount){
-                    console.log("You lose, ",loseCount, " times out of 5");
-                }
-                else if(winCount> loseCount){
-                    console.log("It's a win for you congrats because won ", winCount, " times out of 5");
-                }
-                else{
-                    console.log("It's a draw");
-                }
-            }
+      //get the button id and initialize the buttons
+      const playerBtn = document.querySelectorAll("button");
+      playerBtn.forEach((button) => {
+        button.addEventListener("click", () => {
+          playRound(button.id, computerPlay());
+          console.log("Wincount " + winCount);
+          console.log("Losecount " + loseCount);
+        });
+      });
 
-        </script>
-    </body>
+      //returns the elements`
+      function computerPlay() {
+        const elements = ["Rock", "Paper", "Scissor"];
+        const randElement =
+          elements[Math.floor(Math.random() * elements.length)];
+        return randElement;
+      }
+
+      //function to compare the inputs
+      function playRound(playerSelection, computerSelection) {
+        console.log("This is the computer, " + computerSelection);
+
+        if (
+            (playerSelection === "rock" &&
+              computerSelection.toString().toLowerCase() === "paper") ||
+            (playerSelection === "paper" &&
+              computerSelection.toString().toLowerCase() === "scissor") ||
+            (playerSelection === "scissor" &&
+              computerSelection.toString().toLowerCase() === "rock")
+          ) {
+            message = "lose";
+            loseCount++;
+            resCpu.textContent = loseCount;
+            //condition to display result if player lose more than 5 times
+            if(loseCount > 4){
+              swal("You lose!");
+              displayUI();
+            }
+          } else if (
+            (playerSelection === "rock" &&
+              computerSelection.toString().toLowerCase() === "rock") ||
+            (playerSelection === "paper" &&
+              computerSelection.toString().toLowerCase() === "paper") ||
+            (playerSelection === "scissor" &&
+              computerSelection.toString().toLowerCase() === "scissor")
+          ) {
+            message = "draw";
+            drawCount++;
+            draw.textContent = drawCount;
+          } else {
+            message = "win";
+            winCount++;
+            resPlr.textContent = winCount;
+            if(winCount>4){
+              swal("Congratulations", "you win!", "success");
+              displayUI();
+            }
+          }
+      }
+
+      function displayUI() {
+        winCount = 0;
+        loseCount = 0;
+        drawCount = 0;
+        draw.textContent = drawCount;
+        resCpu.textContent = loseCount;
+        resPlr.textContent = winCount;
+      }
+
+      // function game(){
+      //     for(let i=0; i<5;i++){
+      //         let playerSelection = playerHand();
+      //         let computerSelection = computerPlay();
+      //         let round = playRound(playerSelection,computerSelection);
+
+      //         console.log(playerSelection, "THisis isdfhaskjf");
+      //         console.log("Round",i);
+      //         if(round === "lose"){
+      //             console.log("Computer: ", computerSelection, " --- You: ", playerSelection, " So, you lose.")
+      //             loseCount++;
+      //         }
+      //         else if(round === "draw"){
+      //             console.log("Computer: ", computerSelection, " --- You: ", playerSelection, " So, it's a draw.")
+      //             drawCount++;
+      //         }
+      //         else{
+      //             console.log("Computer: ", computerSelection, " --- You: ", playerSelection, " So, you win.")
+      //             winCount++;
+      //         }
+      //     }
+
+      //     if(loseCount>winCount){
+      //         console.log("You lose, ",loseCount, " times out of 5");
+      //     }
+      //     else if(winCount> loseCount){
+      //         console.log("It's a win for you congrats because won ", winCount, " times out of 5");
+      //     }
+      //     else{
+      //         console.log("It's a draw");
+      //     }
+      // }
+    </script>
+  </body>
 </html>
